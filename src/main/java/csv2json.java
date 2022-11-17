@@ -1,42 +1,144 @@
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONType;
 
+
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.util.*;
 
-public class csv2json {
-    class Figure {
-        String path;
-        int width;
-        int height;
-        int x1;
-        int y1;
-        int x2;
-        int y2;
-        int category;
+public class CSV2JSON {
+    public static Map<Integer, String> categoryMap;
 
-        public Figure(String path, int width, int height, int x1, int y1, int x2, int y2, int category) {
-            this.path = path;
-            this.width = width;
-            this.height = height;
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-            this.category = category;
+    public static String parseCategory(int category) {
+        String res = null;
+
+
+
+
+        return res;
+    }
+    
+
+    public static Map<String, Figure> readCSV(String filename) throws IOException {
+        Map<String, Figure> res = new LinkedHashMap<>();
+        Files.lines(Paths.get(filename))
+                .skip(1)
+                .forEach(line -> {
+                    String[] strs = line.split(",");
+                    List<object> objects = new ArrayList<>();
+                    BBOX bbox = new BBOX(Double.parseDouble(strs[3]), Double.parseDouble(strs[4]),
+                            Double.parseDouble(strs[5]), Double.parseDouble(strs[6]));
+                    String category = parseCategory(Integer.parseInt(strs[7]));
+                    objects.add(new object(category, bbox));
+                    String id = strs[0].replaceAll(".png", "");
+                    Figure figure = new Figure("images" + id + ".png", objects, id);
+                    res.put(id, figure);
+                });
+        return res;
+
+    }
+    public static void main(String[] args) throws IOException {
+        String csvPath = "src/main/resources/annotations.csv";
+        String tablePath = "src/main/resources/categoryMapTable.csv";
+        String resultPath = "src/main/resources/result.json";
+        // generate category map
+        categoryMap = new HashMap<>();
+        Files.lines((Paths.get(tablePath)))
+                .skip(1)
+                .map(line -> line.split(","))
+                .forEach(lines -> {
+                    categoryMap.put(Integer.valueOf(lines[0]), lines[1]);
+                });
+        // generate JSONOject
+        Map<String, Figure> map = readCSV(csvPath);
+        // write to result.json
+        try {
+            FileWriter fw = new FileWriter(resultPath);
+            PrintWriter out = new PrintWriter(fw);
+            out.write(JSON.toJSONString(map, true));
+            out.println();
+            fw.close();
+            out.close();
+        } catch (Exception ex) {
+            System.out.println("写入文件失败");
         }
     }
+}
 
-    public static Stream<String> readCities(String filename) throws IOException
-    {
-        return Files.lines(Paths.get(filename));
-//                .map(l -> l.split(", "))
-//                .map(a -> new City(a[0], a[1], Integer.parseInt(a[2])));
+@JSONType(orders = {"path","objects","id"})
+class Figure {
+    private String path;
+    private List<object> objects;
+    private String id;
+
+    public String getPath() {
+        return path;
     }
-    public static void main(String[] args) {
-        JSONObject jsonObject = new JSONObject();
+
+    public List<object> getObjects() {
+        return objects;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Figure(String path, List<object> objects, String id) {
+        this.path = path;
+        this.objects = objects;
+        this.id = id;
+    }
+}
+
+@JSONType(orders = {"category","bbox"})
+class object{
+    private String category;
+    private BBOX bbox;
+
+    public String getCatagory() {
+        return category;
+    }
+
+    public BBOX getBbox() {
+        return bbox;
+    }
+
+    public object(String category, BBOX bbox) {
+        this.category = category;
+        this.bbox = bbox;
+    }
+}
+
+@JSONType(orders = {"xmin","ymin","xmax","ymax"})
+class BBOX{
+    private double xmin;
+    private double ymin;
+    private double xmax;
+    private double ymax;
+
+    public double getXmin() {
+        return xmin;
+    }
+
+    public double getYmin() {
+        return ymin;
+    }
+
+    public double getXmax() {
+        return xmax;
+    }
+
+    public double getYmax() {
+        return ymax;
+    }
+
+    public BBOX(double xmin, double ymin, double xmax, double ymax) {
+        this.xmin = xmin;
+        this.ymin = ymin;
+        this.xmax = xmax;
+        this.ymax = ymax;
     }
 }
