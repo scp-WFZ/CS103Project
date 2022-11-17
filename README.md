@@ -2,6 +2,8 @@
 
 paper: https://cg.cs.tsinghua.edu.cn/traffic-sign/0682.pdf
 
+tt100k tutorial: https://cg.cs.tsinghua.edu.cn/traffic-sign/tutorial.html
+
 
 
 ## Dataset Annonation Transform
@@ -10,7 +12,7 @@ paper: https://cg.cs.tsinghua.edu.cn/traffic-sign/0682.pdf
 
 #### The Map between category and traffic sign:
 
-![image-20221117130842833](/Users/zhongfantasty/Library/Application Support/typora-user-images/image-20221117130842833.png)
+![tt100k](./src/main/resources/tt100k.png)
 
 #### The annonation format of JSON:
 
