@@ -24,12 +24,12 @@ tt100k tutorial: https://cg.cs.tsinghua.edu.cn/traffic-sign/tutorial.html
       "objects": [
         {
           "category": "category_1",
-          ...
-        },
-        ...
-        {
-          "category": "category_n",
-          ...
+          "bbox": {
+            "xmin": 489.6,
+            "ymin": 993.6,
+            "ymax": 1010.4,
+            "xmax": 507.20000000000005
+          }
         }
       ],
       "id": 1
