@@ -12,14 +12,14 @@ tt100k tutorial: https://cg.cs.tsinghua.edu.cn/traffic-sign/tutorial.html
 
 #### The Map between category and traffic sign:
 
-![tt100k](./src/main/resources/tt100k.png)
+![tt100k](./src/main/resources/tt100k.jpg)
 
 #### The annonation format of JSON:
 
 ```json
 {
   "imgs": {
-    "id": {
+    "1": {
       "path": "path/id.jpg",
       "objects": [
         {
@@ -44,13 +44,15 @@ tt100k tutorial: https://cg.cs.tsinghua.edu.cn/traffic-sign/tutorial.html
 
 #### The Map between category and traffic sign:
 
-category from 0 to 57 ? 
+Category id in [0, 57]
 
-unknow relation
+The map relation can be found in [categoryMapTable.csv](src/main/resources/categoryMapTable.csv)
+
+(Category 31: <img src="src/main/resources/allowturn.png" alt="allow to turn round" style="zoom:5%;" /> can't be found inTT100K)
 
 #### The annonation format of CSV:
 
-| file_name | width | height |  x1  |  y1  |  x2  |  y2  | category |
-| :-------: | :---: | :----: | :--: | :--: | :--: | :--: | :------: |
-|           |       |        |      |      |      |      |          |
+|  file_name   |   width   |   height   |    x1     |    y1     |    x2     |     y2     |         category         |
+| :----------: | :-------: | :--------: | :-------: | :-------: | :-------: | :--------: | :----------------------: |
+| The img name | img width | img height | bbox xmin | bbox ymin | bbox xmax | bbox  ymax | category of traffic sign |
 
