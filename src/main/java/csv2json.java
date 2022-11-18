@@ -12,15 +12,21 @@ import java.util.*;
 public class CSV2JSON {
     public static Map<Integer, String> categoryMap;
 
-    public static String parseCategory(int category) {
-        String res = null;
-
-
-
-
-        return res;
+    /**
+     *
+     * @param path: absolute csv map table path
+     * @throws IOException: FileIOException
+     * @apiNote unmapped: 31 (blue: turn round);
+     */
+    public static void initCategoryMap(String path) throws IOException {
+        categoryMap = new HashMap<>();
+        Files.lines((Paths.get(path)))
+                .skip(1)
+                .map(line -> line.split(","))
+                .forEach(strings -> {
+                    categoryMap.put(Integer.valueOf(strings[0]), strings[1]);
+                });
     }
-    
 
     public static Map<String, Figure> readCSV(String filename) throws IOException {
         Map<String, Figure> res = new LinkedHashMap<>();
@@ -31,10 +37,10 @@ public class CSV2JSON {
                     List<object> objects = new ArrayList<>();
                     BBOX bbox = new BBOX(Double.parseDouble(strs[3]), Double.parseDouble(strs[4]),
                             Double.parseDouble(strs[5]), Double.parseDouble(strs[6]));
-                    String category = parseCategory(Integer.parseInt(strs[7]));
+                    String category = categoryMap.get(Integer.parseInt(strs[7]));
                     objects.add(new object(category, bbox));
                     String id = strs[0].replaceAll(".png", "");
-                    Figure figure = new Figure("images" + id + ".png", objects, id);
+                    Figure figure = new Figure("images/" + id + ".png", objects, id);
                     res.put(id, figure);
                 });
         return res;
@@ -45,13 +51,7 @@ public class CSV2JSON {
         String tablePath = "src/main/resources/categoryMapTable.csv";
         String resultPath = "src/main/resources/result.json";
         // generate category map
-        categoryMap = new HashMap<>();
-        Files.lines((Paths.get(tablePath)))
-                .skip(1)
-                .map(line -> line.split(","))
-                .forEach(lines -> {
-                    categoryMap.put(Integer.valueOf(lines[0]), lines[1]);
-                });
+        initCategoryMap(tablePath);
         // generate JSONOject
         Map<String, Figure> map = readCSV(csvPath);
         // write to result.json
@@ -98,7 +98,7 @@ class object{
     private String category;
     private BBOX bbox;
 
-    public String getCatagory() {
+    public String getCategory() {
         return category;
     }
 
