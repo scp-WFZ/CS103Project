@@ -48,7 +48,7 @@ Category id in [0, 57]
 
 The map relation can be found in [categoryMapTable.csv](src/main/resources/categoryMapTable.csv)
 
-(Category 31: <img src="src/main/resources/allowturn.png" alt="allow to turn round" style="zoom:5%;" /> can't be found inTT100K)
+(Category 31: <img src="src/main/resources/allowturn.png" alt="allow to turn round" width="5" /> can't be found inTT100K)
 
 #### The annonation format of CSV:
 
