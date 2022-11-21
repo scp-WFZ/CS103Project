@@ -62,8 +62,8 @@ public class CSV2JSON {
             out.println();
             fw.close();
             out.close();
-        } catch (Exception ex) {
-            System.out.println("写入文件失败");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
